@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<!-- 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureTrust Bank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        :root {
+            --primary: #0d6035;
+            --secondary: #3cd0d8;
+            --accent: #ffb700;
+            --danger: #e74c3c;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: rgb(255, 255, 255);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: rgb(0, 0, 0);
+        }
+
+        .btn-primary:hover {
+            background: #00a882;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            background: linear-gradient(rgba(26, 107, 139, 0.85), rgba(67, 139, 26, 0.75)), url('https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fthumbs.dreamstime.com%2Fb%2Fadult-grown-up-son-hugs-behind-elderly-mother-happy-senior-mother-spend-time-grown-up-son-relatives-people-hugging-179701539.jpg&sp=1755676845Tc470d5bc2d36ed07e649d903207878df72f908f7d893645031006215c16aa876') center/cover;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(26, 79, 139, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* Accounts Section */
+        .accounts {
+            padding: 80px 0;
+            background: var(--light);
+        }
+
+        .account-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .account-type {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .account-balance {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .account-number {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .account-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Transactions Section */
+        .transactions {
+            padding: 80px 0;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .transaction-table th,
+        .transaction-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .transaction-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .transaction-credit {
+            color: var(--accent);
+        }
+
+        .transaction-debit {
+            color: var(--danger);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .transaction-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-landmark"></i>
+                    <span>Noemi Health Savings</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Accounts</a></li>
+                        <li><a href="#">Transfer</a></li>
+                        <li><a href="#">Payments</a></li>
+                        <li><a href="#">Investments</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Sign In</button>
+                    <button class="btn btn-primary">Open Account</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Health Savings Made Simple</h1>
+                <p>Experience the future of banking with industry-leading security, cutting-edge features, and personalized financial solutions tailored to your needs.</p>
+                <button class="btn btn-primary">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose SecureTrust?</h2>
+                <p>We provide innovative banking solutions to help you manage your finances with confidence</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Advanced Security</h3>
+                    <p>Multi-layered protection with biometric authentication and 24/7 fraud monitoring</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Banking</h3>
+                    <p>Bank anytime, anywhere with our award-winning mobile app</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Low Rates</h3>
+                    <p>Competitive interest rates on loans and high yields on savings accounts</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accounts Section -->
+    <section class="accounts">
+        <div class="container">
+            <div class="section-title">
+                <h2>Your Accounts</h2>
+                <p>Overview of your accounts and balances</p>
+            </div>
+            <div class="account-cards">
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="account-type">Checking Account</div>
+                        <i class="fas fa-credit-card" style="color: var(--primary);"></i>
+                    </div>
+                    <div class="account-balance">$12,458.75</div>
+                    <div class="account-number">**** **** **** 7632</div>
+                    <div class="account-actions">
+                        <button class="btn btn-primary btn-sm">Transfer</button>
+                        <button class="btn btn-outline btn-sm" style="color: var(--primary); border-color: var(--primary);">Details</button>
+                    </div>
+                </div>
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="account-type">Savings Account</div>
+                        <i class="fas fa-piggy-bank" style="color: var(--accent);"></i>
+                    </div>
+                    <div class="account-balance">$28,350.40</div>
+                    <div class="account-number">**** **** **** 9821</div>
+                    <div class="account-actions">
+                        <button class="btn btn-primary btn-sm">Transfer</button>
+                        <button class="btn btn-outline btn-sm" style="color: var(--primary); border-color: var(--primary);">Details</button>
+                    </div>
+                </div>
+                <div class="account-card">
+                    <div class="account-header">
+                        <div class="account-type">Investment Account</div>
+                        <i class="fas fa-chart-line" style="color: var(--secondary);"></i>
+                    </div>
+                    <div class="account-balance">$54,210.85</div>
+                    <div class="account-number">**** **** **** 4517</div>
+                    <div class="account-actions">
+                        <button class="btn btn-primary btn-sm">Invest</button>
+                        <button class="btn btn-outline btn-sm" style="color: var(--primary); border-color: var(--primary);">Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Transactions Section -->
+    <section class="transactions">
+        <div class="container">
+            <div class="section-title">
+                <h2>Recent Transactions</h2>
+                <p>Your latest account activity</p>
+            </div>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Starbucks Coffee</td>
+                        <td>Aug 15, 2023</td>
+                        <td class="transaction-amount transaction-debit">-$5.75</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>Amazon Online Shopping</td>
+                        <td>Aug 14, 2023</td>
+                        <td class="transaction-amount transaction-debit">-$128.50</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>Salary Deposit</td>
+                        <td>Aug 12, 2023</td>
+                        <td class="transaction-amount transaction-credit">+$3,450.00</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>Electric Bill Payment</td>
+                        <td>Aug 10, 2023</td>
+                        <td class="transaction-amount transaction-debit">-$124.30</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>Transfer from John Smith</td>
+                        <td>Aug 8, 2023</td>
+                        <td class="transaction-amount transaction-credit">+$250.00</td>
+                        <td>Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SecureTrust Bank</h3>
+                    <p>Providing trusted banking services since 1987. Your financial security is our top priority.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Personal Banking</a></li>
+                        <li><a href="#">Business Banking</a></li>
+                        <li><a href="#">Loans & Mortgages</a></li>
+                        <li><a href="#">Investment Services</a></li>
+                        <li><a href="#">Insurance</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Help & Support</h3>
+                    <ul>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Online Banking Help</a></li>
+                        <li><a href="#">Security Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Health Street, San Francisco 94103</li>
+                        <li><i class="fas fa-phone"></i> 1-800-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> support@noemihealth.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Noemi Health Savings. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const accountCards = document.querySelectorAll('.account-card');
+            
+            accountCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Simulate login functionality
+            const loginBtn = document.querySelector('.btn-outline');
+            loginBtn.addEventListener('click', function() {
+                alert('Login feature would open here. This is a frontend demonstration.');
+            });
+            
+            const openAccountBtn = document.querySelector('.btn-primary');
+            openAccountBtn.addEventListener('click', function() {
+                alert('Account opening process would start here. This is a frontend demonstration.');
+            });
+        });
+    </script>
+</body>
+</html>
