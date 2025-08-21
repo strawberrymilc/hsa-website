@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSA Login</title>
+    <title>Node.js Login System</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #0ea429 0%, #3eb2ff 100%);
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -105,7 +104,7 @@
         .form.active {
             display: block;
         }
-        .comment-container {
+        .code-container {
             margin-top: 30px;
             background: #2d2d2d;
             color: #f8f8f2;
@@ -114,13 +113,13 @@
             font-family: 'Fira Code', monospace;
             overflow-x: auto;
         }
-        .comment-header {
+        .code-header {
             color: #ff79c6;
             margin-bottom: 10px;
             font-weight: 600;
         }
         .comment {
-            color: #a9b7e1;
+            color: #6272a4;
         }
         .keyword {
             color: #ff79c6;
@@ -131,12 +130,12 @@
         .string {
             color: #f1fa8c;
         }
-    </style>*/
+    </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Health Savings Login</h1>
+            <h1>Node.js Login System</h1>
         </div>
         
         <div class="tabs">
@@ -176,11 +175,12 @@
             </form>
         </div>
         
-        <div class="comment-container">
-            <div class="comment-header">Access your savings for your medical future.</div>
-            <div class="comment">Deposit funds</div>
-            <div class="comment">Acquire a HSA debit card</div>
-            <div class="comment">Save for your future</div>
+        <div class="code-container">
+            <div class="code-header">How to run this system:</div>
+            <div class="comment">// 1. Save this as server.js</div>
+            <div class="comment">// 2. Run: npm install express sqlite3 bcryptjs body-parser</div>
+            <div class="comment">// 3. Run: node server.js</div>
+            <div class="comment">// 4. Open browser to http://localhost:3000</div>
         </div>
     </div>
 
@@ -193,28 +193,25 @@
             document.getElementById(`${formType}Form`).classList.add('active');
         }
 
-        
         async function handleFormSubmit(event, endpoint, messageId) {
             event.preventDefault();
             
-            // Get the form element
+            //const formData = new FormData(event.target);
+            /*for (let step = 0; step <= 3; step++) { 
+                formData.append(event.target.elements[step].id, event.target[step].value);
+            }*/
             const form = event.target;
-            
-            // Create FormData object from the form
-            const formData = new FormData(form);
-            
-            // Convert FormData to a plain object
             const data = {};
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
+            for (let i=0; i < form.elements.length; i++) {
+                const elem = form.elements[i];
+                if (elem.id) {
+                    data[elem.id] = elem.value
+                }
             }
-            
-            // Log the data to console (for debugging)
-            console.log(`POST /${endpoint}`, data);
+            //const data = {};
+            //formData.forEach((value, key) => data[key] = value);
             
             try {
-                // In a real application, you would send this to your server:
-                
                 const response = await fetch(`http://localhost:3000/${endpoint}`, {
                     method: 'POST',
                     headers: {
@@ -224,36 +221,17 @@
                 });
                 
                 const result = await response.json();
+                const messageEl = document.getElementById(messageId);
                 
-                
-                // For demo purposes, we'll simulate a server response
-                //const messageEl = document.getElementById(messageId);
-                
-                // Simulate different responses based on endpoint
-                if (endpoint === 'login') {
-                    if (data.email && data.password) {
-                        messageEl.className = 'message success';
-                        messageEl.textContent = 'Login successful! Redirecting...';
-                    } else {
-                        messageEl.className = 'message error';
-                        messageEl.textContent = 'Email and password are required';
-                    }
-                } else if (endpoint === 'register') {
-                    if (data.name && data.email && data.password) {
-                        messageEl.className = 'message success';
-                        messageEl.textContent = 'Registration successful! You can now login.';
-                    } else {
-                        messageEl.className = 'message error';
-                        messageEl.textContent = 'All fields are required';
-                    }
+                if (response.ok) {
+                    messageEl.className = 'message success';
+                    messageEl.textContent = result.message || 'Success!';
+                } else {
+                    messageEl.className = 'message error';
+                    messageEl.textContent = result.error || 'An error occurred';
                 }
                 
                 messageEl.style.display = 'block';
-                
-                // Clear form after successful submission
-                if (messageEl.className.includes('success')) {
-                    form.reset();
-                }
             } catch (error) {
                 const messageEl = document.getElementById(messageId);
                 messageEl.className = 'message error';
@@ -262,13 +240,20 @@
             }
         }
 
-        // Add event listeners to forms
         document.getElementById('loginForm').addEventListener('submit', (e) => {
-            console.log(`LOGIN FORM /${endpoint}`, data);
+            const data = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value
+            };
             handleFormSubmit(e, 'login', 'loginMessage');
         });
 
         document.getElementById('registerForm').addEventListener('submit', (e) => {
+            const data = {
+                name: document.getElementById('registerName').value,
+                email: document.getElementById('registerEmail').value,
+                password: document.getElementById('registerPassword').value
+            };
             handleFormSubmit(e, 'register', 'registerMessage');
         });
     </script>

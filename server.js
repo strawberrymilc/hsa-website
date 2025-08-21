@@ -31,11 +31,9 @@ db.serialize(() => {
 // Registration endpoint
 app.post('/register', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-
-        console.log("Test:", name, email, password);
-
-        console.log("Test2:", req);
+        const name = req.body["registerName"];
+        const email = req.body["registerEmail"];
+        const password = req.body["registerPassword"];
         
         // Validate input
         if (!name || !email || !password) {
@@ -77,7 +75,8 @@ app.post('/register', async (req, res) => {
 // Login endpoint
 app.post('/login', (req, res) => {
     try {
-        const { email, password } = req.body;
+        const email = req.body["loginEmail"];
+        const password = req.body["loginPassword"];
         
         // Validate input
         if (!email || !password) {
