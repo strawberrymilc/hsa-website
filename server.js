@@ -1,3 +1,5 @@
+//import { createRequire } from "module";
+//const require = createRequire(import.meta.url);
 
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
@@ -113,6 +115,81 @@ app.post('/login', (req, res) => {
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
+});
+
+//////////// ------ CODE FOR BANKING WEBPAGE
+
+// Simulated database
+let users = [
+  { id: 1, email: "placeholder@gmail.com", name: 'John Doe', balance: 5247.85, cardNumber: '4517843256913278', expiry: '09/25', cvv: '327' }
+];
+
+let transactions = [
+  { id: 1, userId: 1, description: 'Amazon Purchase', amount: -128.50, date: '2023-08-15' },
+  { id: 2, userId: 1, description: 'Deposit', amount: 1200.00, date: '2023-08-12' },
+  { id: 3, userId: 1, description: 'Restaurant Payment', amount: -67.80, date: '2023-08-10' }
+];
+
+//export { transactions }; // TODO: THIS IS PROBABLY UNSAFE!! VERIFY
+module.exports = { transactions }; // TODO: THIS IS PROBABLY UNSAFE!! VERIFY
+
+// Routes
+app.get('/api/user/:id', (req, res) => {
+  const user = users.find(u => u.id === parseInt(req.params.id));
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  res.json(user);
+});
+
+app.get('/api/transactions/:userId', (req, res) => {
+  const userTransactions = transactions.filter(t => t.userId === parseInt(req.params.userId));
+  res.json(userTransactions);
+});
+
+app.post('/deposit', (req, res) => {
+    console.log("In deposit");
+    const userId = req.body["id"];
+    const amount = parseInt(req.body["amount"]);
+    const method = req.body["method"];
+
+    const user = users.find(u => u.id === parseInt(userId));
+    
+    if (!user) return res.status(400).json({ error: 'User not found' });
+    console.log("Deposited money. Old balance was:", user.balance);
+    user.balance += amount;
+    console.log("New user balance is:", user.balance);
+    transactions.push({
+        id: transactions.length + 1,
+        userId,
+        description: 'Deposit',
+        amount,
+        date: new Date().toISOString().split('T')[0]
+    });
+    
+    res.json({ success: true, newBalance: user.balance });
+});
+
+app.post('/api/validate-purchase', (req, res) => {
+  const { userId, merchant, amount } = req.body;
+  const user = users.find(u => u.id === parseInt(userId));
+  
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  
+  // Simulate validation logic
+  const isValid = Math.random() > 0.3;
+  const reason = !isValid ? (Math.random() > 0.15 ? 'Suspicious activity detected' : 'Insufficient funds') : '';
+  
+  if (isValid) {
+    user.balance -= amount;
+    transactions.push({
+      id: transactions.length + 1,
+      userId,
+      description: `Purchase at ${merchant}`,
+      amount: -amount,
+      date: new Date().toISOString().split('T')[0]
+    });
+  }
+  
+  res.json({ isValid, reason, newBalance: user.balance });
 });
 
 // Serve the HTML page

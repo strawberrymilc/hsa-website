@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noemi HSA Bank - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a4f8b;
+            --secondary: #3c78d8;
+            --accent: #00b894;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-balance {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00a882;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* Main Content */
+        .dashboard {
+            padding: 40px 0;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: var(--primary);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-title {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* Virtual Card Styles */
+        .virtual-card {
+            background: linear-gradient(135deg, #3a3eb3 0%, #6a11cb 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            height: 180px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #daa520 100%);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-number {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-holder, .card-expiry {
+            font-size: 0.9rem;
+        }
+
+        .card-holder span, .card-expiry span {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        checkbox {
+            margin: 5px 0px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .transaction-list {
+            list-style: none;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .transaction-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .transaction-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .transaction-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+        }
+
+        .debit {
+            color: var(--danger);
+        }
+
+        .credit {
+            color: var(--accent);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .user-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-landmark"></i>
+                    <span>Noemi HSA Bank</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Accounts</a></li>
+                        <li><a href="#">Transactions</a></li>
+                        <li><a href="#">Cards</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </nav>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-balance">Balance: $5247.85</div>
+                    </div>
+                    <a href="signin.html" class="btn btn-outline">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 class="section-title">Banking Dashboard</h2>
+            </div>
+
+            <div class="card-grid">
+                <!-- Virtual Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Virtual Debit Card</h3>
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    
+                    <div class="virtual-card">
+                        <div class="card-chip"></div>
+                        <div class="card-number">•••• •••• •••• 4517</div>
+                        <div class="card-details">
+                            <div class="card-holder">
+                                <span>Card Holder</span>
+                                John Doe
+                            </div>
+                            <div class="card-expiry">
+                                <span>Expires</span>
+                                09/25
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-actions">
+                        <button class="btn btn-primary" id="show-card-btn">Show Card Details</button>
+                        <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary);">Freeze Card</button>
+                    </div>
+                </div>
+
+                <!-- Deposit Funds -->
+                <form id="depositForm" class="form">
+                    <div class="form-group">
+                        <div class="card-header">
+                            <h3 class="card-title">Deposit Funds</h3>
+                            <i class="fas fa-money-bill-wave"></i>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" placeholder="Enter amount">
+                    
+                        <label for="deposit-method">Deposit Method</label>
+                        <select id="deposit-method">
+                            <option value="">Select method</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                            <option value="credit-card">Credit/Debit Card</option>
+                            <option value="mobile-wallet">Mobile Wallet</option>
+                        </select>
+                    </div>
+                        <button type="submit" class="btn btn-primary" id="deposit-btn">Deposit Funds</button>
+                    <div class="form-group">
+                        <div id="depositMessage" class="success"></div>
+                        </div>  
+                    </div>
+                </form>
+
+                <!-- See Funds 
+                <div id="seeFunds" class="seeFunds">
+                    <div class="form-group">
+                        <div class="card-header">
+                            <h3 class="card-title">Balance</h3>
+                            <i class="fas fa-money-bill-wave"></i>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" id="amount" placeholder="Enter amount">
+                    
+                        <label for="deposit-method">Deposit Method</label>
+                        <select id="deposit-method">
+                            <option value="">Select method</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                            <option value="credit-card">Credit/Debit Card</option>
+                            <option value="mobile-wallet">Mobile Wallet</option>
+                        </select>
+                    </div>
+                        <button type="submit" class="btn btn-primary" id="deposit-btn"">Deposit Funds</button>
+                    <div class="form-group">
+                        <div id="depositMessage" class="success"></div>
+                        </div>  
+                    </div>
+                </div>-->
+
+                <!-- Recent Transactions -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recent Transactions</h3>
+                        <i class="fas fa-history"></i>
+                    </div>
+                    
+                    <ul class="transaction-list">
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="transaction-info">
+                                    <h4>Amazon Purchase</h4>
+                                    <p>Aug 15, 2023</p>
+                                </div>
+                            </div>
+                            <div class="transaction-amount debit">-$128.50</div>
+                        </li>
+                        
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="transaction-info">
+                                    <h4>Deposit</h4>
+                                    <p>Aug 12, 2023</p>
+                                </div>
+                            </div>
+                            <div class="transaction-amount credit">+$1,200.00</div>
+                        </li>
+                        
+                        <li class="transaction-item">
+                            <div class="transaction-details">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="transaction-info">
+                                    <h4>Restaurant Payment</h4>
+                                    <p>Aug 10, 2023</p>
+                                </div>
+                            </div>
+                            <div class="transaction-amount debit">-$67.80</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+                </div>
+
+                
+
+            <!-- Purchase Validation -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Purchase Validation</h3>
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                
+                <p style="margin-bottom: 20px;">When making a purchase, we'll validate the transaction to ensure it's legitimate and you have sufficient funds.</p>
+                
+                <div class="form-group">
+                    <label for="merchant">Doctor or Practice</label>
+                    <input type="text" id="merchant" placeholder="Enter doctor name or name of practice.">
+                </div>
+
+                <div class="form-group">
+                    <label for="operation">Operation</label>
+                    <input type="text" id="operation" placeholder="Enter details on what you saw this doctor or practice for">
+                </div>
+
+                <div class="form-group">
+                    <label for="IRSapproved">Confirm this operation is an <a href="https://www.irs.gov/publications/p502">IRS approved medical expense.</a></label><br> 
+                    <input type="checkbox" id="IRSapproved" name="IRSapproved" value="IRS">
+                </div>
+                
+                <div class="form-group">
+                    <label for="purchase-amount">Amount</label>
+                    <input type="number" id="purchase-amount" placeholder="Enter amount">
+                </div>
+                
+                <button class="btn btn-primary" id="validate-btn">Validate Purchase</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <!-- Card Details Modal -->
+    <div class="modal" id="card-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Card Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="virtual-card">
+                <div class="card-chip"></div>
+                <div class="card-number">4517 8432 5691 3278</div>
+                <div class="card-details">
+                    <div class="card-holder">
+                        <span>Card Holder</span>
+                        John Doe
+                    </div>
+                    <div class="card-expiry">
+                        <span>Expires</span>
+                        09/25
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <p><strong>CVV:</strong> 327</p>
+                <p style="margin-top: 10px; color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Keep your card details secure</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation Modal -->
+    <div class="modal" id="validation-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Purchase Validation</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div id="validation-result">
+                <p>Validating your purchase...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3></href>Noemi HSA Bank</h3>
+                    <p>Providing trusted HSA services since 2025. Your financial security is our top priority.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Personal Banking</a></li>
+                        <li><a href="#">Business Banking</a></li>
+                        <li><a href="#">Loans & Mortgages</a></li>
+                        <li><a href="#">Investment Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Help & Support</h3>
+                    <ul>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Security Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Noemi HSA Bank. All rights reserved. | Privacy Policy | Terms of Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        //import { transactions } from '../server.js'
+        //server.js
+        //const { transactions } = require('../server.js')
+
+        // DOM Elements
+        const cardModal = document.getElementById('card-modal');
+        const validationModal = document.getElementById('validation-modal');
+        const showCardBtn = document.getElementById('show-card-btn');
+        const validateBtn = document.getElementById('validate-btn');
+        const depositBtn = document.getElementById('deposit-btn');
+        const closeButtons = document.querySelectorAll('.close');
+
+        // Handle form submit
+        async function handleFormSubmit(event, endpoint, messageId) {
+            event.preventDefault();
+            
+            const form = event.target;
+            const data = {};
+            for (let i=0; i < form.elements.length; i++) {
+                const elem = form.elements[i];
+                if (elem.id) {
+                    data[elem.id] = elem.value
+                }
+            }
+
+            data["id"] = 1;
+
+            console.log("test", data);
+            
+            try {
+                const response = await fetch(`http://localhost:3000/${endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                const messageEl = document.getElementById(messageId);
+                
+                if (response.ok) {
+                    messageEl.className = 'message success';
+                    messageEl.textContent = result.message || 'Success!';
+                } else {
+                    messageEl.className = 'message error';
+                    messageEl.textContent = result.error || 'An error occurred';
+                }
+                
+                messageEl.style.display = 'block';
+            } catch (error) {
+                const messageEl = document.getElementById(messageId);
+                messageEl.className = 'message error';
+                messageEl.textContent = 'Connection error. Make sure the server is running.';
+                messageEl.style.display = 'block';
+            }
+        }
+        
+        // Show card details
+        showCardBtn.addEventListener('click', () => {
+            cardModal.style.display = 'flex';
+        });
+        
+        // Validate purchase
+        validateBtn.addEventListener('click', () => {
+            const merchant = document.getElementById('merchant').value;
+            const operation = document.getElementById('operation').value;
+            const IRS = document.getElementById('IRSapproved').checked;
+            //const IRS = document.querySelector('.checkbox:checked').value;
+            const amount = document.getElementById('purchase-amount').value;
+
+            console.log(IRS);
+
+            
+            if (!merchant || !operation || !amount ) {
+                alert('Please enter all fields');
+                return;
+            }
+            
+            validationModal.style.display = 'flex';
+            
+            // Simulate validation process
+            setTimeout(() => {
+                const validationResult = document.getElementById('validation-result');
+                const random = Math.random();
+                
+                if (IRS == true && amount > 5247.85 && random > 0.15) { // TODO: Amount is placeholder
+                    console.log("Withdrawal approved", IRS, IRS == true, (IRS == true && amount > 5247.85));
+                    validationResult.innerHTML = `
+                        <div style="text-align: center; color: var(--accent);">
+                            <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <h3>Purchase Approved</h3>
+                            <p>Your purchase at ${merchant} for $${amount} has been validated successfully.</p>
+                        </div>
+                    `;
+                } else {
+                    console.log("Withdrawal not approved");
+                    validationResult.innerHTML = `
+                        <div style="text-align: center; color: var(--danger);">
+                            <i class="fas fa-times-circle" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <h3>Purchase Declined</h3>
+                            <p>We couldn't validate your purchase at ${merchant} for $${amount}.</p>
+                            <p>Reason: ${amount > 5247.85 ? 'Insufficient funds' : 'Suspicious activity detected'}</p>
+                        </div>
+                    `;
+                }
+            }, 2000);
+        });
+        
+        // Deposit funds
+        /*depositBtn.addEventListener('click', (e) => {
+            const amount = document.getElementById('amount').value;
+            const method = document.getElementById('deposit-method').value;
+            
+            if (!amount || !method) {
+                alert('Please enter amount and select a deposit method');
+                return;
+            }
+            
+            alert(`Deposit request for $${amount} via ${method} has been submitted.`);
+            document.getElementById('amount').value = '';
+            document.getElementById('deposit-method').value = '';
+
+
+        });*/
+
+        document.getElementById('depositForm').addEventListener('submit', (e) => {
+            const amount = document.getElementById('amount').value;
+            const method = document.getElementById('deposit-method').value;
+
+            
+            if (!amount || !method) {
+                alert('Please enter amount and select a deposit method');
+                return;
+            }
+
+            const data = {
+                email: "placeholder@gmail.com", // TODO: FIX THIS!
+                amount: amount,
+                method: method,
+            };
+            handleFormSubmit(e, 'deposit', 'depositMessage');
+            
+            alert(`Deposit request for $${amount} via ${method} has been submitted.`);
+            document.getElementById('amount').value = '';
+            document.getElementById('deposit-method').value = '';
+        });
+        
+        // Close modals
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                cardModal.style.display = 'none';
+                validationModal.style.display = 'none';
+            });
+        });
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === cardModal) {
+                cardModal.style.display = 'none';
+            }
+            if (event.target === validationModal) {
+                validationModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

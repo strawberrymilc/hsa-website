@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Node.js Login System</title>
+    <title>Noemi HSA Login</title>
     <style>
         * {
             box-sizing: border-box;
@@ -135,7 +135,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Node.js Login System</h1>
+            <h1>Noemi HSA Login</h1>
         </div>
         
         <div class="tabs">
@@ -176,11 +176,8 @@
         </div>
         
         <div class="code-container">
-            <div class="code-header">How to run this system:</div>
-            <div class="comment">// 1. Save this as server.js</div>
-            <div class="comment">// 2. Run: npm install express sqlite3 bcryptjs body-parser</div>
-            <div class="comment">// 3. Run: node server.js</div>
-            <div class="comment">// 4. Open browser to http://localhost:3000</div>
+            <div class="code-header">Lorem isput:</div>
+            <div class="comment">// 1. Ipsut Isput</div>
         </div>
     </div>
 
@@ -226,6 +223,7 @@
                 if (response.ok) {
                     messageEl.className = 'message success';
                     messageEl.textContent = result.message || 'Success!';
+                    window.location.href = 'account_info.html';
                 } else {
                     messageEl.className = 'message error';
                     messageEl.textContent = result.error || 'An error occurred';
